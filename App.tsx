@@ -29,7 +29,7 @@ const predefinedItems: MenuItems[] = [
     description: "A simple, elegant balance of sweet and salty.",
     category: "Starter",
     price: 80,
-    intensity: "Average.R5",
+    intensity: "",
     image:
       "https://images.pexels.com/photos/8922194/pexels-photo-8922194.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Cantaloupe", "prosciutto", "fresh mint", "black pepper", "balsamic glaze"],
@@ -39,7 +39,7 @@ const predefinedItems: MenuItems[] = [
     description: "A creamy, fresh salad bursting with summer flavors.",
     category: "Starter",
     price: 67,
-    intensity: "Average.R6",
+    intensity: "",
     image:
       "https://images.pexels.com/photos/27964906/pexels-photo-27964906.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Heirloom tomatoes", "burrata cheese", "fresh basil", "extra virgin olive oil", "flaky sea salt"],
@@ -49,7 +49,7 @@ const predefinedItems: MenuItems[] = [
     description: "Decadent, molten baked cheese, perfect for sharing.",
     category: "Starter",
     price: 78,
-    intensity: "Average.R5",
+    intensity: "",
     image:
       "https://images.pexels.com/photos/19863259/pexels-photo-19863259.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Camembert wheel", "garlic cloves", "fresh rosemary", "baguette", "apple slices"],
@@ -59,7 +59,7 @@ const predefinedItems: MenuItems[] = [
     description: "Tender, golden-fried squid with a zesty dip.",
     category: "Starter",
     price: 145,
-    intensity: "Average.R3",
+    intensity: "",
     image: "https://images.pexels.com/photos/338713/pexels-photo-338713.jpeg",
     ingredients: ["Squid rings", "flour", "paprika", "lemon", "aioli", "vegetable oil"],
   },
@@ -68,7 +68,7 @@ const predefinedItems: MenuItems[] = [
     description: "A refreshing, retro classic with a creamy pink sauce.",
     category: "Starter",
     price: 65,
-    intensity: "Average.R7",
+    intensity: "",
     image:
       "https://images.pexels.com/photos/16741148/pexels-photo-16741148.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Prawns", "lettuce", "mayonnaise", "ketchup", "lemon juice"],
@@ -78,7 +78,7 @@ const predefinedItems: MenuItems[] = [
     description: "Juicy, whole roasted chicken with a crispy, flavorful herb skin.",
     category: "MainCourse",
     price: 165,
-    intensity: "Average.R4",
+    intensity: "",
     image:
       "https://images.pexels.com/photos/4083585/pexels-photo-4083585.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Whole chicken", "rosemary", "thyme", "garlic", "lemon", "olive oil", "salt", "pepper"],
@@ -88,7 +88,7 @@ const predefinedItems: MenuItems[] = [
     description: "A juicy, hand-formed patty served on a soft, toasted bun.",
     category: "MainCourse",
     price: 140,
-    intensity: "Average.R5",
+    intensity: "",
     image:
       "https://images.pexels.com/photos/30500756/pexels-photo-30500756.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Ground beef", "burger buns", "lettuce", "tomato", "onion", "cheese", "pickles", "condiments"],
@@ -98,7 +98,7 @@ const predefinedItems: MenuItems[] = [
     description: "A hearty, classic Italian meat sauce served over long pasta.",
     category: "MainCourse",
     price: 85,
-    intensity: "Average.R4",
+    intensity: "",
     image:
       "https://images.pexels.com/photos/32632540/pexels-photo-32632540.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Spaghetti", "ground beef", "tomatoes", "onion", "carrots", "celery", "red wine", "Parmesan"],
@@ -108,7 +108,7 @@ const predefinedItems: MenuItems[] = [
     description: "A quick, healthy, and colorful mix of crisp-tender vegetables.",
     category: "MainCourse",
     price: 145,
-    intensity: "Average.R4",
+    intensity: " ",
     image:
       "https://images.pexels.com/photos/4569049/pexels-photo-4569049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Bell peppers", "broccoli", "carrots", "snap peas", "soy sauce", "garlic", "ginger", "tofu or chicken"],
@@ -118,7 +118,7 @@ const predefinedItems: MenuItems[] = [
     description: "Dense, fudgy, and rich chocolate squares.",
     category: "Dessert",
     price: 55,
-    intensity: "Average.R4",
+    intensity: "",
     image:
       "https://images.pexels.com/photos/5386677/pexels-photo-5386677.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Chocolate", "butter", "sugar", "eggs", "flour", "cocoa powder", "walnuts"],
@@ -128,7 +128,7 @@ const predefinedItems: MenuItems[] = [
     description: "An iconic Italian no-bake dessert of coffee-soaked layers and mascarpone.",
     category: "Dessert",
     price: 79,
-    intensity: "Average.R4",
+    intensity: " ",
     image:
       "https://images.pexels.com/photos/27305272/pexels-photo-27305272.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Ladyfingers", "mascarpone", "coffee", "eggs", "sugar", "cocoa powder"],
@@ -138,7 +138,7 @@ const predefinedItems: MenuItems[] = [
     description: "A buttery pastry crust filled with custard and topped with glossy fruit",
     category: "Dessert",
     price: 64,
-    intensity: "Average.R4",
+    intensity: "",
     image:
       "https://images.pexels.com/photos/12702316/pexels-photo-12702316.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Pastry crust", "pastry cream", "strawberries", "kiwi", "blueberries", "apricot glaze"],
@@ -148,7 +148,7 @@ const predefinedItems: MenuItems[] = [
     description: "An incredibly fresh, light, and hydrating spa-style drink",
     category: "Beverage",
     price: 74,
-    intensity: "Average.R3",
+    intensity: "",
     image:
       "https://images.pexels.com/photos/5335918/pexels-photo-5335918.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Cucumber", "lime", "mint", "soda water", "ice", "simple syrup"],
@@ -158,7 +158,7 @@ const predefinedItems: MenuItems[] = [
     description: "A rich, creamy, and comforting warm drink",
     category: "Beverage",
     price: 45,
-    intensity: "Average.R3",
+    intensity: "",
     image:
       "https://images.pexels.com/photos/19271883/pexels-photo-19271883.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Milk", "dark chocolate", "sugar", "whipped cream", "cocoa powder"],
@@ -168,7 +168,7 @@ const predefinedItems: MenuItems[] = [
     description: "A vibrant, earthy, and creamy Japanese-inspired drink.",
     category: "Beverage",
     price: 58,
-    intensity: "Average.R3",
+    intensity: "",
     image:
       "https://images.pexels.com/photos/34334424/pexels-photo-34334424.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Matcha powder", "milk", "honey or sugar", "ice"],
@@ -335,16 +335,16 @@ function HomeScreen(
     ]);
   };
 
-  // Calculate total price
-  const totalPrice = items.reduce((sum, item) => sum + item.price, 0);
+  // Calculate total number of items
+  const totalItems = items.length;
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.mainTitle}>Chef Christoffel Menu</Text>
       <Text style={styles.subtitle}>Starters, Main Courses, Desserts, Beverages</Text>
 
-      {/* 👇 Display total price here */}
-      <Text style={styles.totalText}>Total Menu Price: R{totalPrice.toFixed(2)}</Text>
+      {/* 👇 Display total number of items here */}
+      <Text style={styles.totalText}>Total Menu Items: {totalItems}</Text>
 
       <FlatList
         data={items}
@@ -383,6 +383,7 @@ function HomeScreen(
     </SafeAreaView>
   );
 }
+
 // WelcomeScreen: Displays the welcome screen with a navigation option to HomeScreen
 function WelcomeScreen(
   props: NativeStackScreenProps<RootStackParamList, "WelcomeScreen">
@@ -403,7 +404,7 @@ function WelcomeScreen(
       <View style={styles.overlay}>
         <Text style={styles.welcomeTitle}>Welcome to Chef Christoffel Menu</Text>
         <Text style={styles.welcomeText}>
-          Choose your meals of choice right on your phone 😁
+          Choose your meals of choice right on your phone 👨‍🍳
         </Text>
         
         {/* Start button */}
@@ -459,14 +460,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   welcomeTitle: {
-    color: "#8c8d46ff",
+    color: "#f0f0dfff",
     fontSize: 34,
     fontWeight: "700",
     textAlign: "center",
     marginBottom: 10,
   },
   welcomeText: {
-    color: "#939052ff",
+    color: "#f2f2eaff",
     fontSize: 16,
     textAlign: "center",
     marginBottom: 30,
@@ -523,11 +524,15 @@ backgroundColor: "#562f0357",
     marginBottom: 20,
     elevation: 4,
   },
-  addText: { color: "#5d5027ff", fontSize: 18, fontWeight: "bold" },
+    addText: { 
+    color: "#fff",  // White text color
+    fontSize: 18, 
+    fontWeight: "bold" 
+  },
   formContainer: { backgroundColor: "#f5f5f5", padding: 20 },
   formHeader: {
     fontSize: 24,
-    color: "#624529ff",
+    color: "#7b6e36ff",
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
@@ -610,7 +615,6 @@ backgroundColor: "#562f0357",
   textAlign: "center",
   marginBottom: 10,
 },
-
 
 });
 
