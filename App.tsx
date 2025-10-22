@@ -449,6 +449,165 @@ export default function App() {
     </NavigationContainer>
   );
 }
+// Styles for the components
+const styles = StyleSheet.create({
+  welcomeContainer: { flex: 1, backgroundColor: "#75663aff" },
+  heroImage: { width: "100%", height: "100%", position: "absolute" },
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.45)",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 30,
+  },
+  welcomeTitle: {
+    color: "#8c8d46ff",
+    fontSize: 34,
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  welcomeText: {
+    color: "#939052ff",
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 30,
+  },
+  startButton: {
+    backgroundColor: "#919068ff",
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    borderRadius: 30,
+  },
+  startText: { color: "#fff", fontWeight: "bold", fontSize: 18 },
+  container: { flex: 1, backgroundColor: "#efebe9", padding: 15 },
+  mainTitle: {
+    fontSize: 28,
+    fontWeight: "800",
+    color: "#75663aff",
+    textAlign: "center",
+  },
+  subtitle: {
+    textAlign: "center",
+    color: "#646237ff",
+    marginBottom: 15,
+    fontSize: 15,
+  },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 18,
+    marginVertical: 10,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  cardImage: { width: "100%", height: 220 },
+  cardContent: { padding: 15 },
+  cardTitle: { fontSize: 20, fontWeight: "700", color: "#624529ff" },
+  cardDesc: { color: "#75663aff", fontSize: 14, marginVertical: 5 },
+  cardMeta: { color: "#5a582dff", fontSize: 13 },
+  removeButton: {
+backgroundColor: "#562f0357",
+    padding: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  removeText: { color: "#fff", fontWeight: "bold" },
+  addButton: {
+    backgroundColor: "#624529ff",
+    borderRadius: 30,
+    paddingVertical: 16,
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 20,
+    elevation: 4,
+  },
+  addText: { color: "#5d5027ff", fontSize: 18, fontWeight: "bold" },
+  formContainer: { backgroundColor: "#f5f5f5", padding: 20 },
+  formHeader: {
+    fontSize: 24,
+    color: "#624529ff",
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  input: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    borderColor: "#636033ff",
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    height: 50,
+    justifyContent: "center",
+    marginVertical: 8,
+  },
+  pickerWrapper: { marginVertical: 10 },
+  label: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#847948ff",
+    marginBottom: 6,
+ marginLeft: 4,
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: "#706e44ff",
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    height: 50,
+    justifyContent: "center",
+  },
+  pickerStyle: {
+    height: 50,
+    width: "100%",
+    color: "#847948ff",
+    fontSize: 15,
+  },
+  imagePreview: {
+    width: "100%",
+    height: 220,
+    borderRadius: 15,
+    marginTop: 15,
+  },
+  saveButton: {
+    backgroundColor: "#847948ff",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 15,
+    alignItems: "center",
+  },
+ saveButtonText: { color: "#525028ff", fontWeight: "bold", fontSize: 16 },
+  cancelButton: { alignItems: "center", marginTop: 10 },
+  cancelButtonText: { color: "#85673bff", fontWeight: "bold" },
+
+    checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  checkboxLabel: {
+    fontSize: 16,
+    color: "#333",
+    marginLeft: 8,
+  },
+  filterButton: {
+    backgroundColor: "#847948ff",
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 10,
+    alignItems: "center",
+  },
+  filterButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+});
+
 
 //Code ATTRIBUTION//
 //TITEL :IIE Module Manule 2025//
