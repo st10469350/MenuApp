@@ -14,6 +14,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Platform,
+  Modal,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -175,8 +176,6 @@ const predefinedItems: MenuItems[] = [
   },
 ];
 
-
-
 // ManageMenuScreen: Component for adding new menu items to the system
 function ManageMenuScreen(
   props: NativeStackScreenProps<RootStackParamList, "ManageScreen">
@@ -318,11 +317,17 @@ function ManageMenuScreen(
     </KeyboardAvoidingView>
   );
 }
-// HomeScreen: Displays the list of menu items with an option to remove them
+
+// Replace your existing HomeScreen with this updated version
 function HomeScreen(
   props: NativeStackScreenProps<RootStackParamList, "HomeScreen">
 ) {
   const [items, setItems] = useState<MenuItems[]>(predefinedItems);
+
+  // Filter state
+  const [showFilter, setShowFilter] = useState(false);
+  const [filterCategory, setFilterCategory] = useState<string>("All");
+  const [priceFilter, setPriceFilter] = useState<string>("All"); // "All", "Under80", "80to140", "Above140"
 
   // Function to handle item removal
   const removeItem = (index: number) => {
@@ -335,20 +340,140 @@ function HomeScreen(
     ]);
   };
 
-  // Calculate total number of items
+  // Apply filters to items
+  const filteredItems = items.filter((it) => {
+    // Category filter
+    if (filterCategory !== "All" && it.category !== filterCategory) return false;
+
+    // Price filter
+    if (priceFilter === "Under80" && it.price >= 80) return false;
+    if (priceFilter === "80to140" && (it.price < 80 || it.price > 140)) return false;
+    if (priceFilter === "Above140" && it.price <= 140) return false;
+
+    return true;
+  });
+
+  // Calculate total number of items (after filtering or overall, choose overall)
   const totalItems = items.length;
+  const totalFiltered = filteredItems.length;
+
+  // Reset filters
+  const resetFilters = () => {
+    setFilterCategory("All");
+    setPriceFilter("All");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.mainTitle}>Chef Christoffel Menu</Text>
       <Text style={styles.subtitle}>Starters, Main Courses, Desserts, Beverages</Text>
 
-      {/* 👇 Display total number of items here */}
+      {/* Totals */}
       <Text style={styles.totalText}>Total Menu Items: {totalItems}</Text>
+      {filterCategory !== "All" || priceFilter !== "All" ? (
+        <Text style={[styles.totalText, { fontSize: 14 }]}>
+          Showing {totalFiltered} item(s) (filters applied)
+        </Text>
+      ) : null}
 
+      {/* Filter Toggle Button */}
+      <TouchableOpacity
+        style={styles.filterButton}
+        onPress={() => setShowFilter((s) => !s)}
+      >
+        <Text style={styles.filterButtonText}>{showFilter ? "Hide Filters" : "Show Filters"}</Text>
+      </TouchableOpacity>
+
+      {/* Filter Panel */}
+      {showFilter ? (
+        <View style={styles.filterPanel}>
+          <Text style={styles.label}>Filter by Course</Text>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={filterCategory}
+              onValueChange={(val) => setFilterCategory(String(val))}
+              mode="dropdown"
+              style={styles.pickerStyle}
+            >
+              <Picker.Item label="All" value="All" />
+              <Picker.Item label="Starter" value="Starter" />
+              <Picker.Item label="Main Course" value="MainCourse" />
+              <Picker.Item label="Dessert" value="Dessert" />
+              <Picker.Item label="Beverage" value="Beverage" />
+            </Picker>
+          </View>
+
+          <Text style={[styles.label, { marginTop: 12 }]}>Filter by Price</Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 6 }}>
+            <TouchableOpacity
+              style={[
+                styles.priceChip,
+                priceFilter === "All" && styles.priceChipActive,
+              ]}
+              onPress={() => setPriceFilter("All")}
+            >
+              <Text style={priceFilter === "All" ? styles.priceChipTextActive : styles.priceChipText}>
+                All
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.priceChip,
+                priceFilter === "Under80" && styles.priceChipActive,
+              ]}
+              onPress={() => setPriceFilter("Under80")}
+            >
+              <Text style={priceFilter === "Under80" ? styles.priceChipTextActive : styles.priceChipText}>
+                Under R80
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.priceChip,
+                priceFilter === "80to140" && styles.priceChipActive,
+              ]}
+              onPress={() => setPriceFilter("80to140")}
+            >
+              <Text style={priceFilter === "80to140" ? styles.priceChipTextActive : styles.priceChipText}>
+                R80–R140
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.priceChip,
+                priceFilter === "Above140" && styles.priceChipActive,
+              ]}
+              onPress={() => setPriceFilter("Above140")}
+            >
+              <Text style={priceFilter === "Above140" ? styles.priceChipTextActive : styles.priceChipText}>
+                Above R140
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Buttons row */}
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 12 }}>
+            <TouchableOpacity
+              style={[styles.saveButton, { flex: 1, marginRight: 8 }]}
+              onPress={() => {}}
+            >
+              <Text style={styles.saveButtonText}>Apply</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.cancelButton, { flex: 1, marginLeft: 8, justifyContent: "center" }]}
+              onPress={resetFilters}
+            >
+              <Text style={styles.cancelButtonText}>Reset</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      ) : null}
+
+      {/* Menu list (filtered) */}
       <FlatList
-        data={items}
+        data={filteredItems}
         keyExtractor={(_, i) => i.toString()}
+        contentContainerStyle={{ paddingBottom: 120 }}
         renderItem={({ item, index }) => (
           <View style={styles.card}>
             {item.image ? (
@@ -366,7 +491,7 @@ function HomeScreen(
               </Text>
               <TouchableOpacity
                 style={styles.removeButton}
-                onPress={() => removeItem(index)}
+                onPress={() => removeItem(items.indexOf(item))}
               >
                 <Text style={styles.removeText}>Remove</Text>
               </TouchableOpacity>
@@ -383,6 +508,7 @@ function HomeScreen(
     </SafeAreaView>
   );
 }
+
 
 // WelcomeScreen: Displays the welcome screen with a navigation option to HomeScreen
 function WelcomeScreen(
@@ -448,7 +574,8 @@ export default function App() {
     </NavigationContainer>
   );
 }
-// Styles for the components
+
+// Updated Styles for the components
 const styles = StyleSheet.create({
   welcomeContainer: { flex: 1, backgroundColor: "#75663aff" },
   heroImage: { width: "100%", height: "100%", position: "absolute" },
@@ -459,6 +586,38 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 30,
   },
+
+    filterPanel: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 12,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: "#e6e0c8",
+  },
+  priceChip: {
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#d0caa8",
+    minWidth: 78,
+    alignItems: "center",
+  },
+  priceChipActive: {
+    backgroundColor: "#847948ff",
+    borderColor: "#847948ff",
+  },
+  priceChipText: {
+    fontSize: 13,
+    color: "#4a4a4a",
+  },
+  priceChipTextActive: {
+    fontSize: 13,
+    color: "#fff",
+    fontWeight: "700",
+  },
+
   welcomeTitle: {
     color: "#f0f0dfff",
     fontSize: 34,
@@ -492,6 +651,28 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize: 15,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  totalText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#5b591aff",
+  },
+  filterButton: {
+    backgroundColor: "#847948ff",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
+  filterButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 14,
+  },
   card: {
     backgroundColor: "#fff",
     borderRadius: 18,
@@ -508,24 +689,26 @@ const styles = StyleSheet.create({
   cardDesc: { color: "#75663aff", fontSize: 14, marginVertical: 5 },
   cardMeta: { color: "#5a582dff", fontSize: 13 },
   removeButton: {
-backgroundColor: "#562f0357",
+    backgroundColor: "#562f0357",
     padding: 10,
     borderRadius: 8,
     alignItems: "center",
     marginTop: 10,
   },
   removeText: { color: "#fff", fontWeight: "bold" },
+  buttonContainer: {
+    marginTop: 10,
+    marginBottom: 20,
+  },
   addButton: {
     backgroundColor: "#624529ff",
     borderRadius: 30,
     paddingVertical: 16,
     alignItems: "center",
-    marginTop: 10,
-    marginBottom: 20,
     elevation: 4,
   },
-    addText: { 
-    color: "#fff",  // White text color
+  addText: { 
+    color: "#fff",
     fontSize: 18, 
     fontWeight: "bold" 
   },
@@ -553,7 +736,7 @@ backgroundColor: "#562f0357",
     fontWeight: "600",
     color: "#847948ff",
     marginBottom: 6,
- marginLeft: 4,
+    marginLeft: 4,
   },
   pickerContainer: {
     borderWidth: 1,
@@ -582,40 +765,97 @@ backgroundColor: "#562f0357",
     marginTop: 15,
     alignItems: "center",
   },
- saveButtonText: { color: "#525028ff", fontWeight: "bold", fontSize: 16 },
+  saveButtonText: { color: "#525028ff", fontWeight: "bold", fontSize: 16 },
   cancelButton: { alignItems: "center", marginTop: 10 },
   cancelButtonText: { color: "#85673bff", fontWeight: "bold" },
 
-    checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 10,
+  // Modal and Filter Styles
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  checkboxLabel: {
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 25,
+    width: '85%',
+    maxHeight: '80%',
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#624529ff',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  filterSection: {
+    marginBottom: 20,
+  },
+  filterSectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#75663aff',
+    marginBottom: 15,
+  },
+  filterOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  checkbox: {
+    width: 22,
+    height: 22,
+    borderWidth: 2,
+    borderColor: '#847948ff',
+    borderRadius: 4,
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkboxSelected: {
+    backgroundColor: '#847948ff',
+  },
+  checkmark: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  filterLabel: {
     fontSize: 16,
-    color: "#333",
-    marginLeft: 8,
+    color: '#333',
   },
-  filterButton: {
-    backgroundColor: "#847948ff",
-    padding: 15,
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
     borderRadius: 10,
-    marginVertical: 10,
-    alignItems: "center",
+    alignItems: 'center',
+    marginHorizontal: 5,
   },
-  filterButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
+  resetButton: {
+    backgroundColor: '#f0f0f0',
+    borderWidth: 1,
+    borderColor: '#847948ff',
   },
-  totalText: {
-  fontSize: 16,
-  fontWeight: "600",
-  color: "#5b591aff",
-  textAlign: "center",
-  marginBottom: 10,
-},
-
+  resetButtonText: {
+    color: '#847948ff',
+    fontWeight: 'bold',
+  },
+  applyButton: {
+    backgroundColor: '#847948ff',
+  },
+  applyButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 });
 
 
