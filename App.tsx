@@ -385,6 +385,70 @@ function HomeScreen(
     </SafeAreaView>
   );
 }
+// WelcomeScreen: Displays the welcome screen with a navigation option to HomeScreen
+function WelcomeScreen(
+  props: NativeStackScreenProps<RootStackParamList, "WelcomeScreen">
+) {
+  const { navigation } = props;
+  return (
+    <SafeAreaView style={styles.welcomeContainer}>
+      {/* Hero image */}
+      <Image
+        source={{
+          uri: "https://i.pinimg.com/1200x/90/7e/ef/907eefc0a9baa44ab6bb78ad5d487c9d.jpg",
+        }}
+        style={styles.heroImage}
+        resizeMode="cover"
+      />
+      
+      {/* Overlay with title and description */}
+      <View style={styles.overlay}>
+        <Text style={styles.welcomeTitle}>Welcome to Chef Christoffel Menu</Text>
+        <Text style={styles.welcomeText}>
+          Choose your meals of choice right on your phone 😁
+        </Text>
+        
+        {/* Start button */}
+        <TouchableOpacity
+          style={styles.startButton}
+          onPress={() => navigation.navigate("HomeScreen")}
+        >
+          <Text style={styles.startText}>Continue</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+// Main App component with stack navigation
+export default function App() {
+  const Stack = createNativeStackNavigator<RootStackParamList>();
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="WelcomeScreen"
+          component={WelcomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="HomeScreen"
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ManageScreen"
+          component={ManageMenuScreen}
+          options={{
+            title: "Add Menu Item",
+            headerStyle: { backgroundColor: "#977a3fff" },
+            headerTintColor: "#fff",
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 //Code ATTRIBUTION//
 //TITEL :IIE Module Manule 2025//
