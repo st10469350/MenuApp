@@ -340,17 +340,17 @@ function HomeScreen(
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Main title */}
       <Text style={styles.mainTitle}>Chef Christoffel Menu</Text>
       <Text style={styles.subtitle}>Starters, Main Courses, Desserts, Beverages</Text>
-      
-      {/* List of menu items */}
+
+      {/* 👇 Display total price here */}
+      <Text style={styles.totalText}>Total Menu Price: R{totalPrice.toFixed(2)}</Text>
+
       <FlatList
         data={items}
         keyExtractor={(_, i) => i.toString()}
         renderItem={({ item, index }) => (
           <View style={styles.card}>
-            {/* Image or placeholder if no image is available */}
             {item.image ? (
               <Image source={{ uri: item.image }} style={styles.cardImage} />
             ) : (
@@ -358,15 +358,12 @@ function HomeScreen(
                 <Text>No image</Text>
               </View>
             )}
-            
-            {/* Menu item details */}
             <View style={styles.cardContent}>
               <Text style={styles.cardTitle}>{item.itemName}</Text>
               <Text style={styles.cardDesc}>{item.description}</Text>
               <Text style={styles.cardMeta}>
                 {item.category} · R{item.price} · {item.intensity}
               </Text>
-              {/* Remove button */}
               <TouchableOpacity
                 style={styles.removeButton}
                 onPress={() => removeItem(index)}
@@ -377,8 +374,6 @@ function HomeScreen(
           </View>
         )}
       />
-      
-      {/* Button to add a new item */}
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => props.navigation.navigate("ManageScreen", { items, setItems })}
@@ -608,6 +603,14 @@ backgroundColor: "#562f0357",
     fontWeight: "bold",
     fontSize: 16,
   },
+  totalText: {
+  fontSize: 16,
+  fontWeight: "600",
+  color: "#5b591aff",
+  textAlign: "center",
+  marginBottom: 10,
+},
+
 
 });
 
