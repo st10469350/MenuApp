@@ -318,6 +318,73 @@ function ManageMenuScreen(
     </KeyboardAvoidingView>
   );
 }
+// HomeScreen: Displays the list of menu items with an option to remove them
+function HomeScreen(
+  props: NativeStackScreenProps<RootStackParamList, "HomeScreen">
+) {
+  const [items, setItems] = useState<MenuItems[]>(predefinedItems);
+
+  // Function to handle item removal
+  const removeItem = (index: number) => {
+    Alert.alert("Remove Item", "Are you sure you want to remove this item?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Yes",
+        onPress: () => setItems((prev) => prev.filter((_, i) => i !== index)),
+      },
+    ]);
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Main title */}
+      <Text style={styles.mainTitle}>Chef Christoffel Menu</Text>
+      <Text style={styles.subtitle}>Starters, Main Courses, Desserts, Beverages</Text>
+      
+      {/* List of menu items */}
+      <FlatList
+        data={items}
+        keyExtractor={(_, i) => i.toString()}
+        renderItem={({ item, index }) => (
+          <View style={styles.card}>
+            {/* Image or placeholder if no image is available */}
+            {item.image ? (
+              <Image source={{ uri: item.image }} style={styles.cardImage} />
+            ) : (
+              <View style={[styles.cardImage, { justifyContent: "center", alignItems: "center" }]}>
+                <Text>No image</Text>
+              </View>
+            )}
+            
+            {/* Menu item details */}
+            <View style={styles.cardContent}>
+              <Text style={styles.cardTitle}>{item.itemName}</Text>
+              <Text style={styles.cardDesc}>{item.description}</Text>
+              <Text style={styles.cardMeta}>
+                {item.category} · R{item.price} · {item.intensity}
+              </Text>
+              {/* Remove button */}
+              <TouchableOpacity
+                style={styles.removeButton}
+                onPress={() => removeItem(index)}
+              >
+                <Text style={styles.removeText}>Remove</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      />
+      
+      {/* Button to add a new item */}
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => props.navigation.navigate("ManageScreen", { items, setItems })}
+      >
+        <Text style={styles.addText}>Add New Item</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+}
 
 //Code ATTRIBUTION//
 //TITEL :IIE Module Manule 2025//
