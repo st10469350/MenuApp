@@ -335,6 +335,9 @@ function HomeScreen(
     ]);
   };
 
+  // Calculate total price
+  const totalPrice = items.reduce((sum, item) => sum + item.price, 0);
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Main title */}
