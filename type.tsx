@@ -17,4 +17,5 @@ export type RootStackParamList = {
     items: MenuItems[];
     setItems: React.Dispatch<React.SetStateAction<MenuItems[]>>;
   };
+  
 };

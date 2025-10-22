@@ -23,7 +23,6 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import { RootStackParamList, MenuItems } from "./type";
 
-// Predefined menu items data - acts as initial database for the app
 const predefinedItems: MenuItems[] = [
   {
     itemName: "Chilled Melon and Prosciutto",
@@ -175,9 +174,156 @@ const predefinedItems: MenuItems[] = [
     ingredients: ["Matcha powder", "milk", "honey or sugar", "ice"],
   },
 ];
-/**
- * ManageMenuScreen Component
- * Screen for adding new menu items with form validation
- * Allows chef to input item details and save to the menu
- */
+
+
+
+// ManageMenuScreen: Component for adding new menu items to the system
+function ManageMenuScreen(
+  props: NativeStackScreenProps<RootStackParamList, "ManageScreen">
+) {
+  // State variables to hold the form input values
+  const [itemName, setItemName] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState<string>("Beverage");
+  const [price, setPrice] = useState("");
+  const [image, setImage] = useState("");
+  const [ingredients, setIngredients] = useState("");
+
+  // Handle form submission
+  const handleSubmit = () => {
+    // Check if all fields are filled
+    if (itemName.trim() && description.trim() && category && price.trim()) {
+      const priceValue = parseFloat(price);
+      // Validate price
+      if (!isNaN(priceValue) && priceValue > 0) {
+        // Determine intensity based on price value
+        const intensity =
+          priceValue < 45 ? "Mild" : priceValue < 65 ? "Balanced" : "Strong";
+        
+        // Create a new menu item object
+        const newItem: MenuItems = {
+          itemName: itemName.trim(),
+          description: description.trim(),
+          category,
+          price: priceValue,
+          intensity,
+          image: image.trim() || null,
+          ingredients:
+            ingredients.trim() === ""
+              ? [] // Empty ingredients will be set as an empty array
+              : ingredients.split(",").map((i) => i.trim()), // Split comma-separated ingredients
+        };
+        
+        // Add the new item to the existing list and navigate back
+        props.route.params.setItems([...props.route.params.items, newItem]);
+        props.navigation.goBack();
+      } else {
+        // Show alert if price is invalid
+        Alert.alert("Invalid Price", "Price must be a number greater than 0");
+      }
+    } else {
+      // Show alert if any required field is empty
+      Alert.alert("Missing Fields", "Please fill out all required details before saving.");
+    }
+  };
+
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView contentContainerStyle={styles.formContainer}>
+          {/* Header */}
+          <Text style={styles.formHeader}>Add a New item to the menu</Text>
+          
+          {/* Input fields */}
+          <TextInput
+            style={styles.input}
+            placeholder="Item Name"
+            value={itemName}
+            onChangeText={setItemName}
+          />
+          <TextInput
+            style={[styles.input, { height: 100 }]}
+            placeholder="Description"
+            multiline
+            value={description}
+            onChangeText={setDescription}
+          />
+          
+          {/* Category Picker */}
+          <View style={styles.pickerWrapper}>
+            <Text style={styles.label}>Category</Text>
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={category}
+                onValueChange={(value) => {
+                  setCategory(String(value)); // Update category state
+                }}
+                mode="dropdown"
+                style={styles.pickerStyle}
+              >
+                <Picker.Item label="Starter" value="Starter" />
+                <Picker.Item label="Main Course" value="MainCourse" />
+                <Picker.Item label="Dessert" value="Dessert" />
+                <Picker.Item label="Beverage" value="Beverage" />
+              </Picker>
+            </View>
+          </View>
+          
+          {/* Other input fields */}
+          <TextInput
+            style={styles.input}
+            placeholder="Price (e.g. 50)"
+            keyboardType="numeric"
+            value={price}
+            onChangeText={setPrice}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Ingredients (comma separated)"
+            value={ingredients}
+            onChangeText={setIngredients}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Image URL"
+            value={image}
+            onChangeText={setImage}
+          />
+          
+          {/* Image preview */}
+          {image ? (
+            <Image
+              source={{ uri: image }}
+              style={styles.imagePreview}
+            />
+          ) : null}
+          
+          {/* Save button */}
+          <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
+            <Text style={styles.saveButtonText}>Save Item</Text>
+          </TouchableOpacity>
+          
+          {/* Back button */}
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={() => props.navigation.goBack()}
+          >
+            <Text style={styles.cancelButtonText}>Back</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+  );
+}
+
+//Code ATTRIBUTION//
+//TITEL :IIE Module Manule 2025//
+//AUTHOR:The Independent Institute of Education (pty)Ltd//
+//Date:18/10/2025//
+//VERSION: First Edition//
+//AVALIABLE:https://advtechonline.sharepoint.com/:w:/r/sites/TertiaryStudents/_layouts/15/Doc.aspx?sourcedoc=%7BC4AAF478-96AC-4469-8005-F7CDC4A15EBB%7D&file=MAST5112MM.docx&action=default&mobileredirect=true//
+
 
