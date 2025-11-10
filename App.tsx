@@ -1,869 +1,310 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-  SafeAreaView,
-  Image,
-  Alert,
-  Keyboard,
-  ScrollView,
-  TouchableWithoutFeedback,
-  KeyboardAvoidingView,
-  Platform,
-  Modal,
-} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  createNativeStackNavigator,
-  NativeStackScreenProps,
-} from "@react-navigation/native-stack";
-import { Picker } from "@react-native-picker/picker";
-import { RootStackParamList, MenuItems } from "./type";
-
-const predefinedItems: MenuItems[] = [
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { MenuItem, Course, RootStackParamList } from "./type";
+import WelcomeScreen from "./Screens/WelcomeScreen";
+import HomeScreen from "./Screens/HomeScreen";
+import AddItemScreen from "./Screens/AddItemScreen";
+import FilterScreen from "./Screens/FilterScreen";
+// Create a stack navigator with typed params
+const Stack = createNativeStackNavigator<RootStackParamList>();
+// Predefined sample menu items for the app
+const predefined: MenuItem[] = [
   {
+    id: "1",
     itemName: "Chilled Melon and Prosciutto",
     description: "A simple, elegant balance of sweet and salty.",
-    category: "Starter",
+    category: "Starters",
     price: 80,
-    intensity: "",
+    intensity: "Mild",
     image:
       "https://images.pexels.com/photos/8922194/pexels-photo-8922194.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Cantaloupe", "prosciutto", "fresh mint", "black pepper", "balsamic glaze"],
+    ingredients: [
+      "Cantaloupe",
+      "prosciutto",
+      "fresh mint",
+      "black pepper",
+      "balsamic glaze",
+    ],
   },
   {
+    id: "2",
     itemName: "Heirloom Tomato and Burrata Caprese",
     description: "A creamy, fresh salad bursting with summer flavors.",
-    category: "Starter",
+    category: "Starters",
     price: 67,
-    intensity: "",
+    intensity: "Mild",
     image:
       "https://images.pexels.com/photos/27964906/pexels-photo-27964906.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Heirloom tomatoes", "burrata cheese", "fresh basil", "extra virgin olive oil", "flaky sea salt"],
+    ingredients: [
+      "Heirloom tomatoes",
+      "burrata cheese",
+      "fresh basil",
+      "extra virgin olive oil",
+      "flaky sea salt",
+    ],
   },
   {
+    id: "3",
     itemName: "Baked Camembert with Garlic and Rosemary",
     description: "Decadent, molten baked cheese, perfect for sharing.",
-    category: "Starter",
+    category: "Starters",
     price: 78,
-    intensity: "",
+    intensity: "Mild",
     image:
       "https://images.pexels.com/photos/19863259/pexels-photo-19863259.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Camembert wheel", "garlic cloves", "fresh rosemary", "baguette", "apple slices"],
+    ingredients: [
+      "Camembert wheel",
+      "garlic cloves",
+      "fresh rosemary",
+      "baguette",
+      "apple slices",
+    ],
   },
   {
-    itemName: "Crispy Fried Calamari",
-    description: "Tender, golden-fried squid with a zesty dip.",
-    category: "Starter",
-    price: 145,
-    intensity: "",
-    image: "https://images.pexels.com/photos/338713/pexels-photo-338713.jpeg",
-    ingredients: ["Squid rings", "flour", "paprika", "lemon", "aioli", "vegetable oil"],
-  },
-  {
+    id: "4",
     itemName: "Prawn Cocktail",
     description: "A refreshing, retro classic with a creamy pink sauce.",
-    category: "Starter",
+    category: "Starters",
     price: 65,
-    intensity: "",
+    intensity: "Mild",
     image:
       "https://images.pexels.com/photos/16741148/pexels-photo-16741148.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     ingredients: ["Prawns", "lettuce", "mayonnaise", "ketchup", "lemon juice"],
   },
   {
+    id: "5",
     itemName: "Herb-Crusted Roast Chicken",
-    description: "Juicy, whole roasted chicken with a crispy, flavorful herb skin.",
+    description:"Juicy, whole roasted chicken with a crispy, flavorful herb skin.",
     category: "MainCourse",
     price: 165,
-    intensity: "",
+    intensity: "Balanced",
     image:
       "https://images.pexels.com/photos/4083585/pexels-photo-4083585.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Whole chicken", "rosemary", "thyme", "garlic", "lemon", "olive oil", "salt", "pepper"],
+    ingredients: [
+      "Whole chicken",
+      "rosemary",
+      "thyme",
+      "garlic",
+      "lemon",
+      "olive oil",
+      "salt",
+      "pepper",
+    ],
   },
   {
+    id: "6",
     itemName: "Classic Beef Burger",
     description: "A juicy, hand-formed patty served on a soft, toasted bun.",
     category: "MainCourse",
     price: 140,
-    intensity: "",
+    intensity: "Balanced",
     image:
       "https://images.pexels.com/photos/30500756/pexels-photo-30500756.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Ground beef", "burger buns", "lettuce", "tomato", "onion", "cheese", "pickles", "condiments"],
+    ingredients: [
+      "Ground beef",
+      "burger buns",
+      "lettuce",
+      "tomato",
+      "onion",
+      "cheese",
+      "pickles",
+      "condiments",
+    ],
   },
   {
+    id: "7",
     itemName: "Spaghetti Bolognese",
     description: "A hearty, classic Italian meat sauce served over long pasta.",
     category: "MainCourse",
     price: 85,
-    intensity: "",
+    intensity: "Mild",
     image:
       "https://images.pexels.com/photos/32632540/pexels-photo-32632540.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Spaghetti", "ground beef", "tomatoes", "onion", "carrots", "celery", "red wine", "Parmesan"],
+    ingredients: [
+      "Spaghetti",
+      "ground beef",
+      "tomatoes",
+      "onion",
+      "carrots",
+      "celery",
+      "red wine",
+      "Parmesan",
+    ],
   },
   {
+    id: "8",
     itemName: "Vegetable Stir-Fry",
-    description: "A quick, healthy, and colorful mix of crisp-tender vegetables.",
+    description:
+      "A quick, healthy, and colorful mix of crisp-tender vegetables.",
     category: "MainCourse",
     price: 145,
-    intensity: " ",
+    intensity: "Mild",
     image:
       "https://images.pexels.com/photos/4569049/pexels-photo-4569049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Bell peppers", "broccoli", "carrots", "snap peas", "soy sauce", "garlic", "ginger", "tofu or chicken"],
+    ingredients: [
+      "Bell peppers",
+      "broccoli",
+      "carrots",
+      "snap peas",
+      "soy sauce",
+      "garlic",
+      "ginger",
+      "tofu or chicken",
+    ],
   },
   {
+    id: "9",
     itemName: "Classic Chocolate Brownie",
     description: "Dense, fudgy, and rich chocolate squares.",
     category: "Dessert",
     price: 55,
-    intensity: "",
+    intensity: "Strong",
     image:
       "https://images.pexels.com/photos/5386677/pexels-photo-5386677.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Chocolate", "butter", "sugar", "eggs", "flour", "cocoa powder", "walnuts"],
+    ingredients: [
+      "Chocolate",
+      "butter",
+      "sugar",
+      "eggs",
+      "flour",
+      "cocoa powder",
+      "walnuts",
+    ],
   },
   {
+    id: "10",
     itemName: "Tiramisu",
-    description: "An iconic Italian no-bake dessert of coffee-soaked layers and mascarpone.",
+    description:
+      "An iconic Italian no-bake dessert of coffee-soaked layers and mascarpone.",
     category: "Dessert",
     price: 79,
-    intensity: " ",
+    intensity: "Balanced",
     image:
       "https://images.pexels.com/photos/27305272/pexels-photo-27305272.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Ladyfingers", "mascarpone", "coffee", "eggs", "sugar", "cocoa powder"],
+    ingredients: [
+      "Ladyfingers",
+      "mascarpone",
+      "coffee",
+      "eggs",
+      "sugar",
+      "cocoa powder",
+    ],
   },
   {
+    id: "11",
     itemName: "Fresh Fruit Tart",
-    description: "A buttery pastry crust filled with custard and topped with glossy fruit",
+    description:
+      "A buttery pastry crust filled with custard and topped with glossy fruit.",
     category: "Dessert",
     price: 64,
-    intensity: "",
+    intensity: "Mild",
     image:
       "https://images.pexels.com/photos/12702316/pexels-photo-12702316.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Pastry crust", "pastry cream", "strawberries", "kiwi", "blueberries", "apricot glaze"],
+    ingredients: [
+      "Pastry crust",
+      "pastry cream",
+      "strawberries",
+      "kiwi",
+      "blueberries",
+      "apricot glaze",
+    ],
   },
   {
+    id: "12",
     itemName: "Cucumber Cooler",
-    description: "An incredibly fresh, light, and hydrating spa-style drink",
+    description: "An incredibly fresh, light, and hydrating spa-style drink.",
     category: "Beverage",
     price: 74,
-    intensity: "",
+    intensity: "Mild",
     image:
       "https://images.pexels.com/photos/5335918/pexels-photo-5335918.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Cucumber", "lime", "mint", "soda water", "ice", "simple syrup"],
+    ingredients: ["Cucumber", "lime", "mint", "soda water", "ice", "syrup"],
   },
   {
+    id: "13",
     itemName: "Hot Chocolate",
-    description: "A rich, creamy, and comforting warm drink",
+    description: "A rich, creamy, and comforting warm drink.",
     category: "Beverage",
     price: 45,
-    intensity: "",
+    intensity: "Balanced",
     image:
       "https://images.pexels.com/photos/19271883/pexels-photo-19271883.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Milk", "dark chocolate", "sugar", "whipped cream", "cocoa powder"],
+    ingredients: [
+      "Milk",
+      "dark chocolate",
+      "sugar",
+      "whipped cream",
+      "cocoa powder",
+    ],
   },
   {
+    id: "14",
     itemName: "Iced Matcha Latte",
     description: "A vibrant, earthy, and creamy Japanese-inspired drink.",
     category: "Beverage",
     price: 58,
-    intensity: "",
+    intensity: "Mild",
     image:
       "https://images.pexels.com/photos/34334424/pexels-photo-34334424.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ingredients: ["Matcha powder", "milk", "honey or sugar", "ice"],
+    ingredients: ["Matcha powder", "milk", "honey", "ice"],
   },
+  
 ];
-
-// ManageMenuScreen: Component for adding new menu items to the system
-function ManageMenuScreen(
-  props: NativeStackScreenProps<RootStackParamList, "ManageScreen">
-) {
-  // State variables to hold the form input values
-  const [itemName, setItemName] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState<string>("Beverage");
-  const [price, setPrice] = useState("");
-  const [image, setImage] = useState("");
-  const [ingredients, setIngredients] = useState("");
-
-  // Handle form submission
-  const handleSubmit = () => {
-    // Check if all fields are filled
-    if (itemName.trim() && description.trim() && category && price.trim()) {
-      const priceValue = parseFloat(price);
-      // Validate price
-      if (!isNaN(priceValue) && priceValue > 0) {
-        // Determine intensity based on price value
-        const intensity =
-          priceValue < 45 ? "Mild" : priceValue < 65 ? "Balanced" : "Strong";
-        
-        // Create a new menu item object
-        const newItem: MenuItems = {
-          itemName: itemName.trim(),
-          description: description.trim(),
-          category,
-          price: priceValue,
-          intensity,
-          image: image.trim() || null,
-          ingredients:
-            ingredients.trim() === ""
-              ? [] // Empty ingredients will be set as an empty array
-              : ingredients.split(",").map((i) => i.trim()), // Split comma-separated ingredients
-        };
-        
-        // Add the new item to the existing list and navigate back
-        props.route.params.setItems([...props.route.params.items, newItem]);
-        props.navigation.goBack();
-      } else {
-        // Show alert if price is invalid
-        Alert.alert("Invalid Price", "Price must be a number greater than 0");
-      }
-    } else {
-      // Show alert if any required field is empty
-      Alert.alert("Missing Fields", "Please fill out all required details before saving.");
-    }
-  };
-
-  return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView contentContainerStyle={styles.formContainer}>
-          {/* Header */}
-          <Text style={styles.formHeader}>Add a New item to the menu</Text>
-          
-          {/* Input fields */}
-          <TextInput
-            style={styles.input}
-            placeholder="Item Name"
-            value={itemName}
-            onChangeText={setItemName}
-          />
-          <TextInput
-            style={[styles.input, { height: 100 }]}
-            placeholder="Description"
-            multiline
-            value={description}
-            onChangeText={setDescription}
-          />
-          
-          {/* Category Picker */}
-          <View style={styles.pickerWrapper}>
-            <Text style={styles.label}>Category</Text>
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={category}
-                onValueChange={(value) => {
-                  setCategory(String(value)); // Update category state
-                }}
-                mode="dropdown"
-                style={styles.pickerStyle}
-              >
-                <Picker.Item label="Starter" value="Starter" />
-                <Picker.Item label="Main Course" value="MainCourse" />
-                <Picker.Item label="Dessert" value="Dessert" />
-                <Picker.Item label="Beverage" value="Beverage" />
-              </Picker>
-            </View>
-          </View>
-          
-          {/* Other input fields */}
-          <TextInput
-            style={styles.input}
-            placeholder="Price (e.g. 50)"
-            keyboardType="numeric"
-            value={price}
-            onChangeText={setPrice}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Ingredients (comma separated)"
-            value={ingredients}
-            onChangeText={setIngredients}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Image URL"
-            value={image}
-            onChangeText={setImage}
-          />
-          
-          {/* Image preview */}
-          {image ? (
-            <Image
-              source={{ uri: image }}
-              style={styles.imagePreview}
-            />
-          ) : null}
-          
-          {/* Save button */}
-          <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
-            <Text style={styles.saveButtonText}>Save Item</Text>
-          </TouchableOpacity>
-          
-          {/* Back button */}
-          <TouchableOpacity
-            style={styles.cancelButton}
-            onPress={() => props.navigation.goBack()}
-          >
-            <Text style={styles.cancelButtonText}>Back</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
-  );
-}
-
-// Replace your existing HomeScreen with this updated version
-function HomeScreen(
-  props: NativeStackScreenProps<RootStackParamList, "HomeScreen">
-) {
-  const [items, setItems] = useState<MenuItems[]>(predefinedItems);
-
-  // Filter state
-  const [showFilter, setShowFilter] = useState(false);
-  const [filterCategory, setFilterCategory] = useState<string>("All");
-  const [priceFilter, setPriceFilter] = useState<string>("All"); // "All", "Under80", "80to140", "Above140"
-
-  // Function to handle item removal
-  const removeItem = (index: number) => {
-    Alert.alert("Remove Item", "Are you sure you want to remove this item?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Yes",
-        onPress: () => setItems((prev) => prev.filter((_, i) => i !== index)),
-      },
-    ]);
-  };
-
-  // Apply filters to items
-  const filteredItems = items.filter((it) => {
-    // Category filter
-    if (filterCategory !== "All" && it.category !== filterCategory) return false;
-
-    // Price filter
-    if (priceFilter === "Under80" && it.price >= 80) return false;
-    if (priceFilter === "80to140" && (it.price < 80 || it.price > 140)) return false;
-    if (priceFilter === "Above140" && it.price <= 140) return false;
-
-    return true;
-  });
-
-  // Calculate total number of items (after filtering or overall, choose overall)
-  const totalItems = items.length;
-  const totalFiltered = filteredItems.length;
-
-  // Reset filters
-  const resetFilters = () => {
-    setFilterCategory("All");
-    setPriceFilter("All");
-  };
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.mainTitle}>Chef Christoffel Menu</Text>
-      <Text style={styles.subtitle}>Starters, Main Courses, Desserts, Beverages</Text>
-
-      {/* Totals */}
-      <Text style={styles.totalText}>Total Menu Items: {totalItems}</Text>
-      {filterCategory !== "All" || priceFilter !== "All" ? (
-        <Text style={[styles.totalText, { fontSize: 14 }]}>
-          Showing {totalFiltered} item(s) (filters applied)
-        </Text>
-      ) : null}
-
-      {/* Filter Toggle Button */}
-      <TouchableOpacity
-        style={styles.filterButton}
-        onPress={() => setShowFilter((s) => !s)}
-      >
-        <Text style={styles.filterButtonText}>{showFilter ? "Hide Filters" : "Show Filters"}</Text>
-      </TouchableOpacity>
-
-      {/* Filter Panel */}
-      {showFilter ? (
-        <View style={styles.filterPanel}>
-          <Text style={styles.label}>Filter by Course</Text>
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={filterCategory}
-              onValueChange={(val) => setFilterCategory(String(val))}
-              mode="dropdown"
-              style={styles.pickerStyle}
-            >
-              <Picker.Item label="All" value="All" />
-              <Picker.Item label="Starter" value="Starter" />
-              <Picker.Item label="Main Course" value="MainCourse" />
-              <Picker.Item label="Dessert" value="Dessert" />
-              <Picker.Item label="Beverage" value="Beverage" />
-            </Picker>
-          </View>
-
-          <Text style={[styles.label, { marginTop: 12 }]}>Filter by Price</Text>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 6 }}>
-            <TouchableOpacity
-              style={[
-                styles.priceChip,
-                priceFilter === "All" && styles.priceChipActive,
-              ]}
-              onPress={() => setPriceFilter("All")}
-            >
-              <Text style={priceFilter === "All" ? styles.priceChipTextActive : styles.priceChipText}>
-                All
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.priceChip,
-                priceFilter === "Under80" && styles.priceChipActive,
-              ]}
-              onPress={() => setPriceFilter("Under80")}
-            >
-              <Text style={priceFilter === "Under80" ? styles.priceChipTextActive : styles.priceChipText}>
-                Under R80
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.priceChip,
-                priceFilter === "80to140" && styles.priceChipActive,
-              ]}
-              onPress={() => setPriceFilter("80to140")}
-            >
-              <Text style={priceFilter === "80to140" ? styles.priceChipTextActive : styles.priceChipText}>
-                R80–R140
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.priceChip,
-                priceFilter === "Above140" && styles.priceChipActive,
-              ]}
-              onPress={() => setPriceFilter("Above140")}
-            >
-              <Text style={priceFilter === "Above140" ? styles.priceChipTextActive : styles.priceChipText}>
-                Above R140
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Buttons row */}
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 12 }}>
-            <TouchableOpacity
-              style={[styles.saveButton, { flex: 1, marginRight: 8 }]}
-              onPress={() => {}}
-            >
-              <Text style={styles.saveButtonText}>Apply</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.cancelButton, { flex: 1, marginLeft: 8, justifyContent: "center" }]}
-              onPress={resetFilters}
-            >
-              <Text style={styles.cancelButtonText}>Reset</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ) : null}
-
-      {/* Menu list (filtered) */}
-      <FlatList
-        data={filteredItems}
-        keyExtractor={(_, i) => i.toString()}
-        contentContainerStyle={{ paddingBottom: 120 }}
-        renderItem={({ item, index }) => (
-          <View style={styles.card}>
-            {item.image ? (
-              <Image source={{ uri: item.image }} style={styles.cardImage} />
-            ) : (
-              <View style={[styles.cardImage, { justifyContent: "center", alignItems: "center" }]}>
-                <Text>No image</Text>
-              </View>
-            )}
-            <View style={styles.cardContent}>
-              <Text style={styles.cardTitle}>{item.itemName}</Text>
-              <Text style={styles.cardDesc}>{item.description}</Text>
-              <Text style={styles.cardMeta}>
-                {item.category} · R{item.price} · {item.intensity}
-              </Text>
-              <TouchableOpacity
-                style={styles.removeButton}
-                onPress={() => removeItem(items.indexOf(item))}
-              >
-                <Text style={styles.removeText}>Remove</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
-      />
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => props.navigation.navigate("ManageScreen", { items, setItems })}
-      >
-        <Text style={styles.addText}>Add New Item</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
-  );
-}
-
-
-// WelcomeScreen: Displays the welcome screen with a navigation option to HomeScreen
-function WelcomeScreen(
-  props: NativeStackScreenProps<RootStackParamList, "WelcomeScreen">
-) {
-  const { navigation } = props;
-  return (
-    <SafeAreaView style={styles.welcomeContainer}>
-      {/* Hero image */}
-      <Image
-        source={{
-          uri: "https://i.pinimg.com/1200x/90/7e/ef/907eefc0a9baa44ab6bb78ad5d487c9d.jpg",
-        }}
-        style={styles.heroImage}
-        resizeMode="cover"
-      />
-      
-      {/* Overlay with title and description */}
-      <View style={styles.overlay}>
-        <Text style={styles.welcomeTitle}>Welcome to Chef Christoffel Menu</Text>
-        <Text style={styles.welcomeText}>
-          Choose your meals of choice right on your phone 👨‍🍳
-        </Text>
-        
-        {/* Start button */}
-        <TouchableOpacity
-          style={styles.startButton}
-          onPress={() => navigation.navigate("HomeScreen")}
-        >
-          <Text style={styles.startText}>Continue</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
-}
-
-// Main App component with stack navigation
+// Main App component
 export default function App() {
-  const Stack = createNativeStackNavigator<RootStackParamList>();
+  const [items, setItems] = useState<MenuItem[]>(predefined);
+
+  const addItem = (item: MenuItem) => setItems((prev) => [...prev, item]);
+  const removeItem = (id: string) =>
+    setItems((prev) => prev.filter((i) => i.id !== id));
+
+  const avg = (course: Course) => {
+    const list = items.filter((i) => i.category === course);
+    if (!list.length) return "0.00";
+    const total = list.reduce((sum, i) => sum + i.price, 0);
+    return (total / list.length).toFixed(2);
+  };
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: "#83835eff" },
+          headerTintColor: "#363532ff",
+          headerTitleStyle: { fontWeight: "800" },
+        }}
+      >
         <Stack.Screen
-          name="WelcomeScreen"
+          name="Welcome"
           component={WelcomeScreen}
           options={{ headerShown: false }}
         />
+        <Stack.Screen name="Home" options={{ title: "Menu Bliss" }}>
+          {(props) => (
+            <HomeScreen
+              {...props}
+              items={items}
+              removeItem={removeItem}
+              averages={{
+                Starters: avg("Starters"),
+                "Main Course": avg("MainCourse"),
+                Dessert: avg("Dessert"),
+                Beverage: avg("Beverage"),
+              }}
+            />
+          )}
+        </Stack.Screen>
+        <Stack.Screen name="AddItem" options={{ title: "Add Menu Item" }}>
+          {(props) => <AddItemScreen {...props} addItem={addItem} />}
+        </Stack.Screen>
         <Stack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ManageScreen"
-          component={ManageMenuScreen}
-          options={{
-            title: "Add Menu Item",
-            headerStyle: { backgroundColor: "#977a3fff" },
-            headerTintColor: "#fff",
-          }}
+          name="Filter"
+          component={FilterScreen}
+          options={{ title: "Filter Menu" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-// Updated Styles for the components
-const styles = StyleSheet.create({
-  welcomeContainer: { flex: 1, backgroundColor: "#75663aff" },
-  heroImage: { width: "100%", height: "100%", position: "absolute" },
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.45)",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 30,
-  },
-
-    filterPanel: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 12,
-    marginVertical: 10,
-    borderWidth: 1,
-    borderColor: "#e6e0c8",
-  },
-  priceChip: {
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#d0caa8",
-    minWidth: 78,
-    alignItems: "center",
-  },
-  priceChipActive: {
-    backgroundColor: "#847948ff",
-    borderColor: "#847948ff",
-  },
-  priceChipText: {
-    fontSize: 13,
-    color: "#4a4a4a",
-  },
-  priceChipTextActive: {
-    fontSize: 13,
-    color: "#fff",
-    fontWeight: "700",
-  },
-
-  welcomeTitle: {
-    color: "#f0f0dfff",
-    fontSize: 34,
-    fontWeight: "700",
-    textAlign: "center",
-    marginBottom: 10,
-  },
-  welcomeText: {
-    color: "#f2f2eaff",
-    fontSize: 16,
-    textAlign: "center",
-    marginBottom: 30,
-  },
-  startButton: {
-    backgroundColor: "#919068ff",
-    paddingVertical: 14,
-    paddingHorizontal: 40,
-    borderRadius: 30,
-  },
-  startText: { color: "#fff", fontWeight: "bold", fontSize: 18 },
-  container: { flex: 1, backgroundColor: "#efebe9", padding: 15 },
-  mainTitle: {
-    fontSize: 28,
-    fontWeight: "800",
-    color: "#75663aff",
-    textAlign: "center",
-  },
-  subtitle: {
-    textAlign: "center",
-    color: "#646237ff",
-    marginBottom: 15,
-    fontSize: 15,
-  },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  totalText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#5b591aff",
-  },
-  filterButton: {
-    backgroundColor: "#847948ff",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-  filterButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 14,
-  },
-  card: {
-    backgroundColor: "#fff",
-    borderRadius: 18,
-    marginVertical: 10,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  cardImage: { width: "100%", height: 220 },
-  cardContent: { padding: 15 },
-  cardTitle: { fontSize: 20, fontWeight: "700", color: "#624529ff" },
-  cardDesc: { color: "#75663aff", fontSize: 14, marginVertical: 5 },
-  cardMeta: { color: "#5a582dff", fontSize: 13 },
-  removeButton: {
-    backgroundColor: "#562f0357",
-    padding: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  removeText: { color: "#fff", fontWeight: "bold" },
-  buttonContainer: {
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  addButton: {
-    backgroundColor: "#624529ff",
-    borderRadius: 30,
-    paddingVertical: 16,
-    alignItems: "center",
-    elevation: 4,
-  },
-  addText: { 
-    color: "#fff",
-    fontSize: 18, 
-    fontWeight: "bold" 
-  },
-  formContainer: { backgroundColor: "#f5f5f5", padding: 20 },
-  formHeader: {
-    fontSize: 24,
-    color: "#7b6e36ff",
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  input: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    borderColor: "#636033ff",
-    borderWidth: 1,
-    paddingHorizontal: 12,
-    height: 50,
-    justifyContent: "center",
-    marginVertical: 8,
-  },
-  pickerWrapper: { marginVertical: 10 },
-  label: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: "#847948ff",
-    marginBottom: 6,
-    marginLeft: 4,
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: "#706e44ff",
-    borderRadius: 10,
-    backgroundColor: "#fff",
-    height: 50,
-    justifyContent: "center",
-  },
-  pickerStyle: {
-    height: 50,
-    width: "100%",
-    color: "#847948ff",
-    fontSize: 15,
-  },
-  imagePreview: {
-    width: "100%",
-    height: 220,
-    borderRadius: 15,
-    marginTop: 15,
-  },
-  saveButton: {
-    backgroundColor: "#847948ff",
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 15,
-    alignItems: "center",
-  },
-  saveButtonText: { color: "#525028ff", fontWeight: "bold", fontSize: 16 },
-  cancelButton: { alignItems: "center", marginTop: 10 },
-  cancelButtonText: { color: "#85673bff", fontWeight: "bold" },
-
-  // Modal and Filter Styles
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 25,
-    width: '85%',
-    maxHeight: '80%',
-  },
-  modalTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#624529ff',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  filterSection: {
-    marginBottom: 20,
-  },
-  filterSectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#75663aff',
-    marginBottom: 15,
-  },
-  filterOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  checkbox: {
-    width: 22,
-    height: 22,
-    borderWidth: 2,
-    borderColor: '#847948ff',
-    borderRadius: 4,
-    marginRight: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkboxSelected: {
-    backgroundColor: '#847948ff',
-  },
-  checkmark: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-  filterLabel: {
-    fontSize: 16,
-    color: '#333',
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  modalButton: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginHorizontal: 5,
-  },
-  resetButton: {
-    backgroundColor: '#f0f0f0',
-    borderWidth: 1,
-    borderColor: '#847948ff',
-  },
-  resetButtonText: {
-    color: '#847948ff',
-    fontWeight: 'bold',
-  },
-  applyButton: {
-    backgroundColor: '#847948ff',
-  },
-  applyButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-});
-
-
-//Code ATTRIBUTION//
-//TITEL :IIE Module Manule 2025//
-//AUTHOR:The Independent Institute of Education (pty)Ltd//
-//Date:18/10/2025//
-//VERSION: First Edition//
-//AVALIABLE:https://advtechonline.sharepoint.com/:w:/r/sites/TertiaryStudents/_layouts/15/Doc.aspx?sourcedoc=%7BC4AAF478-96AC-4469-8005-F7CDC4A15EBB%7D&file=MAST5112MM.docx&action=default&mobileredirect=true//
-
 

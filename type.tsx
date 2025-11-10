@@ -1,21 +1,30 @@
-import React from "react";
+// Define the types of courses available in the menu
+export type Course = "Starters" | "MainCourse" | "Dessert" | "Beverage";
 
-export type MenuItems = {
-  itemName: string;
-  description: string;
-  category: string;
-  price: number;
-  intensity: string;
-  image: string | null;
-  ingredients: string[];
-};
+// Define the structure of a menu item
+export interface MenuItem {
+  id: string;             
+  itemName: string;       
+  description: string;    
+  category: Course;       
+  price: number;          
+  intensity: string;      
+  image: string;         
+  ingredients: string[];  
+}
 
+// Define the screens in the app and the parameters they accept
 export type RootStackParamList = {
-  WelcomeScreen: undefined;
-  HomeScreen: undefined;
-  ManageScreen: {
-    items: MenuItems[];
-    setItems: React.Dispatch<React.SetStateAction<MenuItems[]>>;
-  };
-  
+  Welcome: undefined;         
+  Home: undefined;            
+  AddItem: undefined;         
+  Filter: { items: MenuItem[] }; 
 };
+
+
+
+
+
+
+
+
